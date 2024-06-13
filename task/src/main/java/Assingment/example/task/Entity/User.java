@@ -22,18 +22,18 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String user_name;
-    private String user_type;
+//    private String user_type;
     private String email;
     private String password;
     private LocalDateTime created_at;
 
     public User() {
-
+        this.created_at = LocalDateTime.now();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(user_type= "USER"));
+        return List.of(new SimpleGrantedAuthority("USER"));
     }
 
     @Override

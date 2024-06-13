@@ -34,10 +34,10 @@ public class AuthenticationService {
         User user = new User();
         user.setEmail(request.getEmail());
         user.setUser_name(request.getUser_name());
-        user.setUser_type(request.getUser_type());
+//        user.setUser_type(request.getUser_type());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepo.save(user);
-        String token = jwtService.generateToken(user, String.valueOf(user.getUser_type()),  String.valueOf(user.getUser_name()), user.getId());
+        String token = jwtService.generateToken(user,"USER",  String.valueOf(user.getUser_name()), user.getId());
 
         return token;
     }
@@ -49,7 +49,7 @@ public class AuthenticationService {
                 ));
 
         User user = userRepo.findByEmail(request.getEmail()).orElseThrow();
-        String token = jwtService.generateToken(user, String.valueOf(auth.getAuthorities().stream().findAny().get()), user.getUser_name(), user.getId());
+        String token = jwtService.generateToken(user, "USER", user.getUser_name(), user.getId());
 
         return new AuthenticationResponse(token);
 

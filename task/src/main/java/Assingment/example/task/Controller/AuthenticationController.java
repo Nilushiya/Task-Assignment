@@ -19,7 +19,7 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
-    @PostMapping("/register")
+    @PostMapping("/signup")
     public String register(@RequestBody UserDto request){
         return authenticationService.register(request);
     }

@@ -1,7 +1,72 @@
 package Assingment.example.task.Service;
 
+import Assingment.example.task.Dto.TaskDto;
+import Assingment.example.task.Entity.Task;
+import Assingment.example.task.Repository.TaskRepo;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TaskServiceImp implements TaskService{
+    @Autowired TaskRepo taskRepo;
+    @Override
+    public Task createTask(TaskDto taskDto, Long userId) {
+        Task task = new Task();
+        BeanUtils.copyProperties(taskDto, task);
+        task.setUser_id(userId);
+        task.setCreated_at(LocalDateTime.now());
+        if (task.getStatus() == null) {
+            task.setStatus("not_completed");
+        }
+        Task savedFaculty = taskRepo.save(task);
+        return savedFaculty;
+    }
+
+    @Override
+    public String getTasksByUserId(Long user_id) {
+        List<Task> tasks = taskRepo.findTaskByUserid(user_id);
+        if (tasks.isEmpty()) {
+          return ("No tasks found for user with ID: " + user_id);
+        }
+//        return tasks;
+        return tasks.toString();
+    }
+
+    @Override
+    public String deleteTask(Long task_id) {
+          Optional<Task> tasks= taskRepo.findById(task_id);
+        if (tasks.isEmpty()) {
+            return ("No tasks found for task with ID: " + task_id);
+        }
+//        return tasks;
+        else{
+            taskRepo.deleteById(task_id);
+            return tasks.toString();
+        }
+    }
+
+    @Override
+    public String updateTask(TaskDto updatedTask, Long task_id) {
+        Optional<Task> tasks= taskRepo.findById(task_id);
+        if (tasks.isEmpty()) {
+            return ("No tasks found for task with ID: " + task_id);
+        }
+        else{
+            Task task = new Task();
+            BeanUtils.copyProperties(updatedTask, task);
+            task.setTask_id(task_id);
+            taskRepo.save(task);
+            return ("Update Successfully");
+        }
+    }
+
+    @Override
+    public Task updateStatus(String status, Long id) {
+        return null;
+    }
 }

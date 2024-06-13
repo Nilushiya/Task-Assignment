@@ -22,30 +22,25 @@ public class SecurityConfig {
         this.userServiceImp = userServiceImp;
         this.jwtAuthendicationFilter = jwtAuthendicationFilter;
     }
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        System.out.println(Role.ADMIN.name());
-//        return http
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests(
-//
-//                        req -> req.requestMatchers("/api/v1/login").permitAll()
-//                                .requestMatchers("/api/v1/register").permitAll()
-//                                .requestMatchers("/api/v1/university/**").permitAll()
-//                                .requestMatchers("/api/v1/faculty/**").permitAll()
-//                                .requestMatchers("/api/v1/department/**").permitAll()
-//                                .requestMatchers("/api/v1/EngDetails/**").permitAll()
-//                                .requestMatchers("/api/v1/studentInfo/**").permitAll()
-//                                .requestMatchers("/api/v1/question/**").permitAll()
-//                                .requestMatchers("/api/v1/student/**").permitAll()
-//                                .anyRequest()
-//                                .authenticated()
-//                ).userDetailsService(studentDetailsImp)
-//                .sessionManagement(session -> session
-//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .addFilterBefore(jwtAuthenticationFilter , UsernamePasswordAuthenticationFilter.class)
-//                .build();
-//    }
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(
+
+                        req -> req.requestMatchers("/api/v1/login").permitAll()
+                                .requestMatchers("/api/v1/signup").permitAll()
+                                .requestMatchers("/api/v1/task/**").permitAll()
+                                .anyRequest()
+                                .authenticated()
+                ).userDetailsService(userServiceImp)
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthendicationFilter , UsernamePasswordAuthenticationFilter.class)
+                .build();
+
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
