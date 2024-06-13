@@ -57,10 +57,24 @@ public class TaskServiceImp implements TaskService{
             return ("No tasks found for task with ID: " + task_id);
         }
         else{
-            Task task = new Task();
-            BeanUtils.copyProperties(updatedTask, task);
-            task.setTask_id(task_id);
-            taskRepo.save(task);
+            Task existingTask = tasks.get();
+
+            // Update only the non-null fields from updatedTask
+            if (updatedTask.getTitle() != null) {
+                existingTask.setTitle(updatedTask.getTitle());
+            }
+            if (updatedTask.getDescription() != null) {
+                existingTask.setDescription(updatedTask.getDescription());
+            }
+            if (updatedTask.getPriority() != null) {
+                existingTask.setPriority(updatedTask.getPriority());
+            }
+            if (updatedTask.getStatus() != null) {
+                existingTask.setStatus(updatedTask.getStatus());
+            }
+
+
+            taskRepo.save(existingTask);
             return ("Update Successfully");
         }
     }
