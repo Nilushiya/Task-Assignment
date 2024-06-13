@@ -53,7 +53,7 @@ public class JwtService {
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 5))
                 .claim("userType",userType)
                 .claim("name",name)
-                .claim("studentId",id)
+                .claim("userId",id)
                 .signWith(getSigninKey())
                 .compact();
 

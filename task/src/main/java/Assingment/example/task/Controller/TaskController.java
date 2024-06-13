@@ -19,6 +19,7 @@ public class TaskController {
 
     @PostMapping("/add/{user_id}")
     public ResponseEntity<Task> addTask(@RequestBody TaskDto taskDto, @PathVariable Long user_id) {
+        System.out.println("taskDto"+taskDto);
         return ResponseEntity.status(201).body(taskService.createTask(taskDto,user_id));
     }
       @GetMapping("/get/{user_id}")
