@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin("*")
 @RequiredArgsConstructor
@@ -23,15 +25,15 @@ public class TaskController {
         return ResponseEntity.status(201).body(taskService.createTask(taskDto,user_id));
     }
       @GetMapping("/get/{user_id}")
-      public ResponseEntity<String> getTasksByUserId(@PathVariable Long user_id) {
-          String tasks = taskService.getTasksByUserId(user_id);
+      public Object getTasksByUserId(@PathVariable Long user_id) {
+          List<Task> tasks = taskService.getTasksByUserId(user_id);
           if (tasks.isEmpty()) {
-              ResponseEntity<String> body = ResponseEntity.status(HttpStatus.NO_CONTENT)
-                      .body("No tasks found for user with ID: " + user_id);
+              ResponseEntity<List<Task>> body = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
               return body;
           } else {
-              return ResponseEntity.ok(tasks.toString());
+              return tasks;
           }
+//          return tasks;
       }
 
     @DeleteMapping("/delete/{task_id}")

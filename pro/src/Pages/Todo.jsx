@@ -24,14 +24,22 @@ useEffect(() => {
      setUserId(user);
     }
   },[])
+
+  
+  useEffect(() => {
+    if (userId) {
+      loadTasks();
+    }
+  }, [userId]);
+
   const loadTasks = async () => {
+    console.log("userId:",userId);
     try {
       const response = await axios.get(`http://localhost:9090/api/v1/task/get/${userId}`);
       console.log("add:",response.data)
       setTasks(response.data);
     } catch (error) {
       console.error('Error loading tasks:', error);
-      // Handle error, show alert, etc.
     }
   };
 
@@ -50,7 +58,7 @@ useEffect(() => {
 
   const updateTask = async (taskId, updatedFields) => {
     try {
-      await axios.put(`http://localhost:9090/api/v1/task/updatetask/${taskId}`, updatedFields, {
+      await axios.put(`http://localhost:9090/api/v1/task/update/${taskId}`, updatedFields, {
         headers: { 'Content-Type': 'application/json' }
       });
       loadTasks();
@@ -62,7 +70,7 @@ useEffect(() => {
 
   const deleteTask = async (taskId) => {
     try {
-      await axios.delete(`http://localhost:9090/api/v1/task/deletetask/${taskId}`);
+      await axios.delete(`http://localhost:9090/api/v1/task/delete/${taskId}`);
       setTasks(tasks.filter(task => task.task_id !== taskId));
     } catch (error) {
       console.error('Error deleting task:', error);
@@ -71,7 +79,9 @@ useEffect(() => {
   };
   return (
     <div className='todo'>
-         <h2>Tasks</h2>
+      <h1>{username}</h1>
+      <h2>This is your Task Management</h2>
+         
         <TaskForm addTask={addTask} />
         <TaskList tasks={tasks} updateTask={updateTask} deleteTask={deleteTask} loadTasks = {loadTasks}/>
     </div>

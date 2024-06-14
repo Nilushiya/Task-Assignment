@@ -28,13 +28,15 @@ public class TaskServiceImp implements TaskService{
     }
 
     @Override
-    public String getTasksByUserId(Long user_id) {
+    public List<Task> getTasksByUserId(Long user_id) {
         List<Task> tasks = taskRepo.findTaskByUserid(user_id);
         if (tasks.isEmpty()) {
-          return ("No tasks found for user with ID: " + user_id);
+          return tasks;
         }
-//        return tasks;
-        return tasks.toString();
+        else{
+            return tasks;
+
+        }
     }
 
     @Override
